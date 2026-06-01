@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>1200+ Unique MIME Subject + From Encoder</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06070b;--panel:#11141b;--panel2:#181c26;--border:#272d3c;--accent:#7b61ff;--text:#f4f6ff;--muted:#8f97b4;--green:#29d39f;}*{margin:0;padding:0;box-sizing:border-box;}body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;}.wrap{max-width:1900px;margin:auto;padding:24px;}.header{margin-bottom:24px;}.title{font-size:42px;font-weight:800;margin-bottom:8px;}.desc{color:var(--muted);font-size:14px;line-height:1.7;}.layout{display:grid;grid-template-columns:340px 1fr;gap:24px;}.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:24px;padding:22px;height:calc(100vh - 80px);overflow:auto;position:sticky;top:24px;}.label{color:var(--muted);font-size:12px;margin-bottom:10px;font-weight:700;}textarea{width:100%;min-height:130px;resize:vertical;background:var(--panel2);border:1px solid var(--border);border-radius:16px;padding:14px;color:white;outline:none;font-family:"JetBrains Mono",monospace;font-size:12px;line-height:1.7;margin-bottom:20px;}textarea:focus{border-color:var(--accent);}.btn{width:100%;border:none;background:var(--accent);color:white;font-weight:800;font-size:15px;border-radius:16px;padding:16px;cursor:pointer;}.btn:hover{opacity:.92;}.stats{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}.stat{background:var(--panel2);border:1px solid var(--border);border-radius:14px;padding:14px;}.num{font-size:24px;font-weight:800;}.txt{color:var(--muted);font-size:11px;margin-top:4px;}.main{display:flex;flex-direction:column;gap:18px;}.toolbar{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}.search{flex:1;min-width:200px;height:50px;border-radius:14px;border:1px solid var(--border);background:var(--panel2);color:white;padding:0 16px;outline:none;font-family:"JetBrains Mono",monospace;}.copyall{width:auto;padding:0 24px;height:50px;}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(800px,1fr));gap:18px;}.card{background:var(--panel);border:1px solid var(--border);border-radius:20px;overflow:hidden;}.head{background:var(--panel2);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}.badge{color:#b7a9ff;font-size:11px;font-family:"JetBrains Mono",monospace;}.case-badge{color:#29d39f;font-size:10px;font-family:"JetBrains Mono",monospace;background:rgba(41,211,159,.1);border:1px solid rgba(41,211,159,.25);border-radius:6px;padding:3px 8px;}.copy{background:transparent;border:1px solid var(--border);color:white;width:auto;padding:8px 12px;border-radius:10px;cursor:pointer;font-size:11px;}.body{padding:18px;}.row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}.block{background:#090b10;border:1px solid var(--border);border-radius:14px;padding:14px;}.small{color:var(--muted);font-size:11px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em;}.code{font-family:"JetBrains Mono",monospace;font-size:11px;line-height:1.8;word-break:break-all;}.toast{position:fixed;right:20px;bottom:20px;background:var(--green);color:black;padding:14px 18px;border-radius:12px;font-weight:800;opacity:0;transform:translateY(30px);transition:.3s;}.toast.show{opacity:1;transform:translateY(0);}
+.case-section{margin-bottom:16px;}.case-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}.case-toggle{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:8px 10px;cursor:pointer;font-size:11px;font-family:"JetBrains Mono",monospace;color:var(--muted);text-align:center;transition:.15s;user-select:none;}.case-toggle.on{border-color:var(--accent);color:var(--accent);background:rgba(123,97,255,.1);}.case-toggle-all{width:100%;background:transparent;border:1px dashed var(--border);color:var(--muted);border-radius:10px;padding:7px;font-size:11px;cursor:pointer;margin-bottom:8px;}
+@media(max-width:1200px){.layout{grid-template-columns:1fr;}.sidebar{position:relative;height:auto;}.grid{grid-template-columns:1fr;}.row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="title">1200+ Unique MIME Encoder</div>
+    <div class="desc">Generate unique RFC2047 Subject and From encodings with real MIME encoded-word techniques + automatic letter-case transformations.</div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="label">SUBJECTS</div>
+      <textarea id="subjects">Amazon's Just Extended These Memorial Day Deals
+Important Account Notification
+Live Amazon Incredible Spring Deals</textarea>
+      <div class="label">FROM NAMES</div>
+      <textarea id="froms">Deals watchdogs
+Amazon Rewards
+Prime Alerts</textarea>
+
+      <div class="label" style="margin-top:4px">LETTER CASE VARIANTS</div>
+      <div class="case-section">
+        <button class="case-toggle-all" onclick="toggleAllCases()">Toggle All Cases</button>
+        <div class="case-grid" id="caseGrid"></div>
+      </div>
+
+      <button class="btn" onclick="generateAll()">Generate Encodings</button>
+      <div class="stats">
+        <div class="stat"><div class="num" id="count">0</div><div class="txt">UNIQUE PAIRS</div></div>
+        <div class="stat"><div class="num" id="caseCount">0</div><div class="txt">CASE VARIANTS</div></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="toolbar">
+        <input class="search" id="search" placeholder="Search subject, from, charset, case..." oninput="render()"/>
+        <select id="filterCase" style="height:50px;border-radius:14px;border:1px solid var(--border);background:var(--panel2);color:var(--muted);padding:0 12px;font-size:12px;outline:none;" onchange="render()">
+          <option value="">All cases</option>
+        </select>
+        <button class="btn copyall" onclick="copyAll()">Copy All</button>
+      </div>
+      <div id="grid" class="grid"></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied</div>
+
+<script>
+// ─── Case Transformation Definitions ───────────────────────────────────────
+const CASE_TRANSFORMS = [
+  { id:'original',      label:'Original',         fn: s => s },
+  { id:'upper',         label:'UPPERCASE',         fn: s => s.toUpperCase() },
+  { id:'lower',         label:'lowercase',         fn: s => s.toLowerCase() },
+  { id:'title',         label:'Title Case',        fn: s => s.replace(/\b\w/g, c => c.toUpperCase()).replace(/\B\w/g, c => c.toLowerCase()) },
+  { id:'sentence',      label:'Sentence case',     fn: s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() },
+  { id:'alternating',   label:'AlTeRnAtInG',       fn: s => [...s].map((c,i) => i%2===0 ? c.toUpperCase() : c.toLowerCase()).join('') },
+  { id:'alternating2',  label:'aLtErNaTiNg2',      fn: s => [...s].map((c,i) => i%2===0 ? c.toLowerCase() : c.toUpperCase()).join('') },
+  { id:'inverseTitle',  label:'iNVERSE tITLE',     fn: s => s.replace(/\b\w/g, c => c.toLowerCase()).replace(/\B\w/g, c => c.toUpperCase()) },
+  { id:'camelLike',     label:'camelLike',         fn: s => { const w=s.split(' '); return w.map((w,i)=>i===0?w.toLowerCase():w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' '); } },
+  { id:'random',        label:'rAnDoM*',           fn: s => [...s].map(c => Math.random()>.5?c.toUpperCase():c.toLowerCase()).join('') },
+  { id:'wordUpper',     label:'EVERY Word UP',     fn: s => s.split(' ').map(w=>w.toUpperCase()).join(' ') },
+  { id:'wordLower',     label:'every word low',    fn: s => s.split(' ').map(w=>w.toLowerCase()).join(' ') },
+  { id:'firstUpper',    label:'First UPPER rest',  fn: s => s.charAt(0).toUpperCase() + s.slice(1) },
+  { id:'lastUpper',     label:'rest LAST upper',   fn: s => s.slice(0,-1) + s.charAt(s.length-1).toUpperCase() },
+  { id:'vowelUpper',    label:'vOwEl UPPER',       fn: s => s.replace(/[aeiou]/gi, c => c.toUpperCase()) },
+  { id:'vowelLower',    label:'Vowel lower',       fn: s => s.replace(/[aeiou]/gi, c => c.toLowerCase()) },
+  { id:'consonantUp',   label:'COnSoNaNt UP',      fn: s => s.replace(/[^aeiou\s]/gi, c => c.toUpperCase()) },
+  { id:'everyOtherWd',  label:'EVERY other Word',  fn: s => s.split(' ').map((w,i)=>i%2===0?w.toUpperCase():w.toLowerCase()).join(' ') },
+  { id:'everyOtherWd2', label:'every OTHER word',  fn: s => s.split(' ').map((w,i)=>i%2===0?w.toLowerCase():w.toUpperCase()).join(' ') },
+  { id:'zigzagWord',    label:'ZigZag Words',      fn: s => s.split(' ').map((w,i)=>i%3===0?w.toUpperCase():i%3===1?w.toLowerCase():w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ') },
+];
+
+const charsets = ['UTF-8','ISO-8859-1','WINDOWS-1252','UTF-16','UTF-16BE','UTF-16LE','US-ASCII','SHIFT_JIS','GBK','BIG5'];
+const methods = ['B','Q','HEXQ'];
+const spacings = [' ','  ','   '];
+const folds = [30,40,50,60,70];
+const wordModes = ['normal','split','pair','triple'];
+
+let allResults = [];
+let enabledCases = new Set(['original','upper','lower','title','sentence','alternating']);
+
+// ─── Build Case Toggle UI ───────────────────────────────────────────────────
+function buildCaseUI() {
+  const grid = document.getElementById('caseGrid');
+  const sel = document.getElementById('filterCase');
+  sel.innerHTML = '<option value="">All cases</option>';
+  grid.innerHTML = CASE_TRANSFORMS.map(t => `
+    <div class="case-toggle ${enabledCases.has(t.id)?'on':''}" data-id="${t.id}" onclick="toggleCase('${t.id}',this)">
+      ${t.label}
+    </div>
+  `).join('');
+  CASE_TRANSFORMS.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t.id; opt.textContent = t.label;
+    sel.appendChild(opt);
+  });
+  updateCaseCount();
+}
+
+function toggleCase(id, el) {
+  if (enabledCases.has(id)) enabledCases.delete(id);
+  else enabledCases.add(id);
+  el.classList.toggle('on');
+  updateCaseCount();
+}
+
+function toggleAllCases() {
+  const allOn = enabledCases.size === CASE_TRANSFORMS.length;
+  enabledCases = allOn ? new Set() : new Set(CASE_TRANSFORMS.map(t=>t.id));
+  document.querySelectorAll('.case-toggle').forEach(el => {
+    el.classList.toggle('on', !allOn);
+  });
+  updateCaseCount();
+}
+
+function updateCaseCount() {
+  document.getElementById('caseCount').textContent = enabledCases.size;
+}
+
+// ─── Encoding Engine ────────────────────────────────────────────────────────
+function getCharsetBytes(str, charset) {
+  const upperCS = charset.toUpperCase();
+  if (upperCS === 'UTF-8' || upperCS === 'US-ASCII') return Array.from(new TextEncoder().encode(str));
+  if (upperCS.startsWith('UTF-16')) {
+    let bytes = [];
+    for (let i = 0; i < str.length; i++) {
+      let code = str.charCodeAt(i);
+      upperCS === 'UTF-16LE' ? bytes.push(code&0xFF, (code>>8)&0xFF) : bytes.push((code>>8)&0xFF, code&0xFF);
+    }
+    return bytes;
+  }
+  let bytes = [];
+  for (let i = 0; i < str.length; i++) {
+    let code = str.charCodeAt(i);
+    if (code <= 0x7F) bytes.push(code);
+    else if (upperCS === 'ISO-8859-1' || upperCS === 'WINDOWS-1252') bytes.push(code & 0xFF);
+    else bytes.push((code>>8)&0xFF, code&0xFF);
+  }
+  return bytes.filter(b => b !== 0 || upperCS.startsWith('UTF-16'));
+}
+
+function hexQP(str, charset) {
+  return getCharsetBytes(str, charset).map(b => '=' + b.toString(16).toUpperCase().padStart(2,'0')).join('');
+}
+function b64(str, charset) {
+  return btoa(getCharsetBytes(str, charset).map(b => String.fromCharCode(b)).join(''));
+}
+function qp(str, charset) {
+  return getCharsetBytes(str, charset).map(b => {
+    if (b===32) return '_';
+    if (b>=33&&b<=126&&b!==61&&b!==95) return String.fromCharCode(b);
+    return '=' + b.toString(16).toUpperCase().padStart(2,'0');
+  }).join('');
+}
+
+function foldMIME(chunks, maxLineSize) {
+  let lines = [], cur = '';
+  chunks.forEach(token => {
+    if (!cur) { cur = token; return; }
+    (cur + ' ' + token).length > maxLineSize ? (lines.push(cur), cur = token) : (cur += ' ' + token);
+  });
+  if (cur) lines.push(cur);
+  return lines.join('\r\n');
+}
+
+function buildAdvanced(text, charset, method, spacing, foldSize, wordMode) {
+  const rawWords = text.split(' ');
+  if (!rawWords.length || text === '') return '';
+  let groupings = [];
+  if (wordMode==='normal') groupings = [rawWords.join(' ')];
+  else if (wordMode==='split') groupings = rawWords;
+  else if (wordMode==='pair') { for(let i=0;i<rawWords.length;i+=2) groupings.push(rawWords.slice(i,i+2).join(' ')); }
+  else if (wordMode==='triple') { for(let i=0;i<rawWords.length;i+=3) groupings.push(rawWords.slice(i,i+3).join(' ')); }
+  const encoded = groupings.map((chunk, idx) => {
+    let cp = idx < groupings.length-1 ? chunk + spacing : chunk;
+    if (!cp) return '';
+    if (method==='B') return `=?${charset}?B?${b64(cp,charset)}?=`;
+    if (method==='Q') return `=?${charset}?Q?${qp(cp,charset)}?=`;
+    if (method==='HEXQ') return `=?${charset}?Q?${hexQP(cp,charset)}?=`;
+    return '';
+  }).filter(Boolean);
+  return foldMIME(encoded, foldSize);
+}
+
+// ─── Main Generate ──────────────────────────────────────────────────────────
+function generateAll() {
+  allResults = [];
+  const unique = new Set();
+  const subjects = document.getElementById('subjects').value.split('\n').map(v=>v.trim()).filter(Boolean);
+  const froms = document.getElementById('froms').value.split('\n').map(v=>v.trim()).filter(Boolean);
+  const activeCases = CASE_TRANSFORMS.filter(t => enabledCases.has(t.id));
+
+  subjects.forEach(subject => {
+    froms.forEach(from => {
+      activeCases.forEach(caseT => {
+        const cSub = caseT.fn(subject);
+        const cFrom = caseT.fn(from);
+        charsets.forEach(charset => {
+          methods.forEach(method => {
+            spacings.forEach(spacing => {
+              folds.forEach(foldSize => {
+                wordModes.forEach(wordMode => {
+                  const subEncoded = buildAdvanced(cSub, charset, method, spacing, foldSize, wordMode);
+                  const fromEncoded = buildAdvanced(cFrom, charset, method, spacing, foldSize, wordMode);
+                  const key = subEncoded + '||' + fromEncoded;
+                  if (!unique.has(key)) {
+                    unique.add(key);
+                    allResults.push({ subject, from, caseId: caseT.id, caseLabel: caseT.label, charset, method, subEncoded, fromEncoded, cSub, cFrom });
+                  }
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  document.getElementById('count').innerText = allResults.length.toLocaleString();
+  render();
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filterCase = document.getElementById('filterCase').value;
+  const filtered = allResults.filter(r =>
+    (!filterCase || r.caseId === filterCase) &&
+    (!q || r.subject.toLowerCase().includes(q) || r.from.toLowerCase().includes(q) ||
+      r.subEncoded.toLowerCase().includes(q) || r.fromEncoded.toLowerCase().includes(q) ||
+      r.caseLabel.toLowerCase().includes(q) || r.charset.toLowerCase().includes(q))
+  );
+  document.getElementById('grid').innerHTML = filtered.slice(0, 500).map(r => `
+    <div class="card">
+      <div class="head">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <div class="badge">${r.charset} / ${r.method}</div>
+          <div class="case-badge">${r.caseLabel}</div>
+        </div>
+        <button class="copy" onclick="copyPair(\`${escapeBackticks(r.subEncoded)}\`,\`${escapeBackticks(r.fromEncoded)}\`)">Copy Pair</button>
+      </div>
+      <div class="body">
+        <div class="row" style="margin-bottom:10px;">
+          <div class="block" style="background:#0a0d08;border-color:#1e2d1e;">
+            <div class="small" style="color:#29d39f;">SUBJECT PREVIEW</div>
+            <div style="font-size:12px;color:#b8e8cc;">${escapeHtml(r.cSub)}</div>
+          </div>
+          <div class="block" style="background:#0a0d08;border-color:#1e2d1e;">
+            <div class="small" style="color:#29d39f;">FROM PREVIEW</div>
+            <div style="font-size:12px;color:#b8e8cc;">${escapeHtml(r.cFrom)}</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="block">
+            <div class="small">SUBJECT ENCODED</div>
+            <div class="code">${escapeHtml(r.subEncoded)}</div>
+          </div>
+          <div class="block">
+            <div class="small">FROM ENCODED</div>
+            <div class="code">${escapeHtml(r.fromEncoded)}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('') + (filtered.length > 500 ? `<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">Showing 500 of ${filtered.length.toLocaleString()} results. Use search/filter to narrow down.</div>` : '');
+}
+
+function copyPair(subject, from) {
+  navigator.clipboard.writeText(`Subject: ${subject}\nFrom: ${from}`);
+  showToast();
+}
+function copyAll() {
+  navigator.clipboard.writeText(allResults.map(r=>`Subject: ${r.subEncoded}\nFrom: ${r.fromEncoded}`).join('\n\n'));
+  showToast();
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escapeBackticks(s) { return s.replace(/`/g,'\\`'); }
+
+buildCaseUI();
+generateAll();
+</script>
+</body>
+</html>
