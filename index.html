@@ -56,27 +56,66 @@ Prime Alerts</textarea>
 
 <script>
 // ─── Case Transformation Definitions ───────────────────────────────────────
+// helpers for space-between variants
+const sp1 = s => s.split('').join(' ');          // s p a c e d
+const sp2 = s => s.split('').join('  ');         // d o u b l e
+const spW = s => s.split(' ').join('  ');        // word  gaps
+const spW3= s => s.split(' ').join('   ');       // word   gaps
+
 const CASE_TRANSFORMS = [
-  { id:'original',      label:'Original',         fn: s => s },
-  { id:'upper',         label:'UPPERCASE',         fn: s => s.toUpperCase() },
-  { id:'lower',         label:'lowercase',         fn: s => s.toLowerCase() },
-  { id:'title',         label:'Title Case',        fn: s => s.replace(/\b\w/g, c => c.toUpperCase()).replace(/\B\w/g, c => c.toLowerCase()) },
-  { id:'sentence',      label:'Sentence case',     fn: s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() },
-  { id:'alternating',   label:'AlTeRnAtInG',       fn: s => [...s].map((c,i) => i%2===0 ? c.toUpperCase() : c.toLowerCase()).join('') },
-  { id:'alternating2',  label:'aLtErNaTiNg2',      fn: s => [...s].map((c,i) => i%2===0 ? c.toLowerCase() : c.toUpperCase()).join('') },
-  { id:'inverseTitle',  label:'iNVERSE tITLE',     fn: s => s.replace(/\b\w/g, c => c.toLowerCase()).replace(/\B\w/g, c => c.toUpperCase()) },
-  { id:'camelLike',     label:'camelLike',         fn: s => { const w=s.split(' '); return w.map((w,i)=>i===0?w.toLowerCase():w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' '); } },
-  { id:'random',        label:'rAnDoM*',           fn: s => [...s].map(c => Math.random()>.5?c.toUpperCase():c.toLowerCase()).join('') },
-  { id:'wordUpper',     label:'EVERY Word UP',     fn: s => s.split(' ').map(w=>w.toUpperCase()).join(' ') },
-  { id:'wordLower',     label:'every word low',    fn: s => s.split(' ').map(w=>w.toLowerCase()).join(' ') },
-  { id:'firstUpper',    label:'First UPPER rest',  fn: s => s.charAt(0).toUpperCase() + s.slice(1) },
-  { id:'lastUpper',     label:'rest LAST upper',   fn: s => s.slice(0,-1) + s.charAt(s.length-1).toUpperCase() },
-  { id:'vowelUpper',    label:'vOwEl UPPER',       fn: s => s.replace(/[aeiou]/gi, c => c.toUpperCase()) },
-  { id:'vowelLower',    label:'Vowel lower',       fn: s => s.replace(/[aeiou]/gi, c => c.toLowerCase()) },
-  { id:'consonantUp',   label:'COnSoNaNt UP',      fn: s => s.replace(/[^aeiou\s]/gi, c => c.toUpperCase()) },
-  { id:'everyOtherWd',  label:'EVERY other Word',  fn: s => s.split(' ').map((w,i)=>i%2===0?w.toUpperCase():w.toLowerCase()).join(' ') },
-  { id:'everyOtherWd2', label:'every OTHER word',  fn: s => s.split(' ').map((w,i)=>i%2===0?w.toLowerCase():w.toUpperCase()).join(' ') },
-  { id:'zigzagWord',    label:'ZigZag Words',      fn: s => s.split(' ').map((w,i)=>i%3===0?w.toUpperCase():i%3===1?w.toLowerCase():w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ') },
+  // ── Standard case ────────────────────────────────────────────────────────
+  { id:'original',      label:'Original',           fn: s => s },
+  { id:'upper',         label:'UPPERCASE',           fn: s => s.toUpperCase() },
+  { id:'lower',         label:'lowercase',           fn: s => s.toLowerCase() },
+  { id:'title',         label:'Title Case',          fn: s => s.replace(/\b\w/g,c=>c.toUpperCase()).replace(/\B\w/g,c=>c.toLowerCase()) },
+  { id:'sentence',      label:'Sentence case',       fn: s => s.charAt(0).toUpperCase()+s.slice(1).toLowerCase() },
+  { id:'alternating',   label:'AlTeRnAtInG',         fn: s => [...s].map((c,i)=>i%2===0?c.toUpperCase():c.toLowerCase()).join('') },
+  { id:'alternating2',  label:'aLtErNaTiNg2',        fn: s => [...s].map((c,i)=>i%2===0?c.toLowerCase():c.toUpperCase()).join('') },
+  { id:'inverseTitle',  label:'iNVERSE tITLE',       fn: s => s.replace(/\b\w/g,c=>c.toLowerCase()).replace(/\B\w/g,c=>c.toUpperCase()) },
+  { id:'camelLike',     label:'camelLike',           fn: s => { const w=s.split(' '); return w.map((w,i)=>i===0?w.toLowerCase():w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' '); } },
+  { id:'random',        label:'rAnDoM*',             fn: s => [...s].map(c=>Math.random()>.5?c.toUpperCase():c.toLowerCase()).join('') },
+  { id:'wordUpper',     label:'EVERY Word UP',       fn: s => s.split(' ').map(w=>w.toUpperCase()).join(' ') },
+  { id:'wordLower',     label:'every word low',      fn: s => s.split(' ').map(w=>w.toLowerCase()).join(' ') },
+  { id:'firstUpper',    label:'First upper rest',    fn: s => s.charAt(0).toUpperCase()+s.slice(1) },
+  { id:'lastUpper',     label:'rest Last Upper',     fn: s => s.slice(0,-1)+s.charAt(s.length-1).toUpperCase() },
+  { id:'vowelUpper',    label:'vOwEl UPPER',         fn: s => s.replace(/[aeiou]/gi,c=>c.toUpperCase()) },
+  { id:'vowelLower',    label:'Vowel lower',         fn: s => s.replace(/[aeiou]/gi,c=>c.toLowerCase()) },
+  { id:'consonantUp',   label:'COnSoNaNt UP',        fn: s => s.replace(/[^aeiou\s]/gi,c=>c.toUpperCase()) },
+  { id:'everyOtherWd',  label:'EVERY other Word',    fn: s => s.split(' ').map((w,i)=>i%2===0?w.toUpperCase():w.toLowerCase()).join(' ') },
+  { id:'everyOtherWd2', label:'every OTHER word',    fn: s => s.split(' ').map((w,i)=>i%2===0?w.toLowerCase():w.toUpperCase()).join(' ') },
+  { id:'zigzagWord',    label:'ZigZag Words',        fn: s => s.split(' ').map((w,i)=>i%3===0?w.toUpperCase():i%3===1?w.toLowerCase():w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ') },
+
+  // ── Single-space between every character ─────────────────────────────────
+  { id:'spaced',        label:'S p a c e d',         fn: s => sp1(s) },
+  { id:'spacedUp',      label:'S P A C E D UP',      fn: s => sp1(s.toUpperCase()) },
+  { id:'spacedLo',      label:'s p a c e d lo',      fn: s => sp1(s.toLowerCase()) },
+  { id:'spacedTitle',   label:'S p A c E d Title',   fn: s => sp1(s.replace(/\b\w/g,c=>c.toUpperCase()).replace(/\B\w/g,c=>c.toLowerCase())) },
+  { id:'spacedAlt',     label:'S p A c E d AlT',     fn: s => sp1([...s].map((c,i)=>i%2===0?c.toUpperCase():c.toLowerCase()).join('')) },
+
+  // ── Double-space between every character ─────────────────────────────────
+  { id:'dblSpaced',     label:'D  b  l  S  p  c',   fn: s => sp2(s) },
+  { id:'dblSpacedUp',   label:'D  B  L  S  P  C',   fn: s => sp2(s.toUpperCase()) },
+  { id:'dblSpacedLo',   label:'d  b  l  s  p  c',   fn: s => sp2(s.toLowerCase()) },
+
+  // ── Double-space between words only ──────────────────────────────────────
+  { id:'wordGap2',      label:'Word  Double  Gap',   fn: s => spW(s) },
+  { id:'wordGap2Up',    label:'WORD  DOUBLE  GAP',   fn: s => spW(s.toUpperCase()) },
+  { id:'wordGap2Lo',    label:'word  double  gap',   fn: s => spW(s.toLowerCase()) },
+  { id:'wordGap2Title', label:'Word  Gap  Title',    fn: s => spW(s.replace(/\b\w/g,c=>c.toUpperCase()).replace(/\B\w/g,c=>c.toLowerCase())) },
+  { id:'wordGap2Alt',   label:'WORD  alt  WORD',     fn: s => spW(s.split(' ').map((w,i)=>i%2===0?w.toUpperCase():w.toLowerCase()).join(' ')) },
+
+  // ── Triple-space between words only ──────────────────────────────────────
+  { id:'wordGap3',      label:'Word   Triple   Gap', fn: s => spW3(s) },
+  { id:'wordGap3Up',    label:'WORD   TRIPLE   GAP', fn: s => spW3(s.toUpperCase()) },
+  { id:'wordGap3Lo',    label:'word   triple   gap', fn: s => spW3(s.toLowerCase()) },
+  { id:'wordGap3Title', label:'Word   Gap   Title',  fn: s => spW3(s.replace(/\b\w/g,c=>c.toUpperCase()).replace(/\B\w/g,c=>c.toLowerCase())) },
+
+  // ── Mixed: spaced chars + case ────────────────────────────────────────────
+  { id:'spacedSentence',label:'S e n t e n c e',     fn: s => sp1(s.charAt(0).toUpperCase()+s.slice(1).toLowerCase()) },
+  { id:'spacedInvTitle',label:'i N v T i T l E',     fn: s => sp1(s.replace(/\b\w/g,c=>c.toLowerCase()).replace(/\B\w/g,c=>c.toUpperCase())) },
+  { id:'spacedVowelUp', label:'s P a C e D vwl',     fn: s => sp1(s.replace(/[aeiou]/gi,c=>c.toUpperCase())) },
+  { id:'wgap2AltCase',  label:'aLt  wOrD  gAp2',     fn: s => spW([...s].map((c,i)=>i%2===0?c.toLowerCase():c.toUpperCase()).join('')) },
+  { id:'wgap3AltCase',  label:'AlT   WoRd   GaP3',   fn: s => spW3([...s].map((c,i)=>i%2===0?c.toUpperCase():c.toLowerCase()).join('')) },
 ];
 
 const charsets = ['UTF-8','ISO-8859-1','WINDOWS-1252','UTF-16','UTF-16BE','UTF-16LE','US-ASCII','SHIFT_JIS','GBK','BIG5'];
@@ -86,7 +125,7 @@ const folds = [30,40,50,60,70];
 const wordModes = ['normal','split','pair','triple'];
 
 let allResults = [];
-let enabledCases = new Set(['original','upper','lower','title','sentence','alternating']);
+let enabledCases = new Set(['original','upper','lower','title','sentence','alternating','spaced','spacedUp','spacedLo','wordGap2','wordGap2Up','wordGap2Lo','wordGap3','wordGap3Up']);
 
 // ─── Build Case Toggle UI ───────────────────────────────────────────────────
 function buildCaseUI() {
